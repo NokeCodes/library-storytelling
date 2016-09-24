@@ -1,0 +1,8 @@
+roanoke_lib:
+    resource: "@RoanokeLibBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
