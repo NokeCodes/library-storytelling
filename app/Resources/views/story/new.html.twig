@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Story creation</h1>
+
+    {{ form_start(form, { 'attr' : {'enctype': 'multipart/form-data' } } ) }}
+        {{ form_widget(form) }}
+        
+        {{ form_widget(media_form) }}
+        <input type="submit" value="Create" />
+    {{ form_end(form) }}
+    
+ 
+
+    <ul>
+        <li>
+            <a href="{{ path('story_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

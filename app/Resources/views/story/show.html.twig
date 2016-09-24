@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Story</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ story.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ story.name }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ story.description }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{% if story.created %}{{ story.created|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{% if story.updated %}{{ story.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('story_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('story_edit', { 'id': story.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+            {% for media in story.media %}
+                <a href="{{ path('story_media_download', { 'id': media.id } ) }}">Download {{ media.name }}</a>
+            {% endfor %}
+            
+{% endblock %}

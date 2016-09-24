@@ -37,6 +37,9 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    form_themes:
+        # other form themes
+        - 'VichUploaderBundle:Form:fields.html.twig'
 
 # Doctrine Configuration
 doctrine:
@@ -68,3 +71,25 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+knp_gaufrette:
+    stream_wrapper: ~
+
+    adapters:
+        story_adapter:
+            local:
+                directory: %kernel.root_dir%/data/story
+
+    filesystems:
+        story_media_fs:
+            adapter:    story_adapter
+
+vich_uploader:
+    db_driver: orm
+    storage:   gaufrette
+
+    mappings:
+        story_media:
+            #uri_prefix:         /images/products
+            upload_destination: story_media_fs
+            namer:              vich_uploader.namer_origname
