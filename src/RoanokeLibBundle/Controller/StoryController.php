@@ -54,10 +54,16 @@ class StoryController extends Controller
 
         if ($form->isSubmitted() && $form->isValid() && $media_form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $story->addMedia($media);
-            $media->setStory($story);
+            if($media->getMediaName())
+            {
+                
+                $story->addMedia($media);
+                $media->setStory($story);
+                $media->setName($media->getMediaName());
+                
+                $em->persist($media);
+            }
             $em->persist($story);
-            $em->persist($media);
             $em->flush();
 
             return $this->redirectToRoute('story_show', array('id' => $story->getId()));

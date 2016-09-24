@@ -25,6 +25,14 @@
                 <th>Updated</th>
                 <td>{% if story.updated %}{{ story.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
             </tr>
+            <tr>
+                <th>Latitude</th>
+                <td>{% if story.latitude %}{{ story.latitude }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Longtitude</th>
+                <td>{% if story.longitude %}{{ story.longitude }}{% endif %}</td>
+            </tr>
         </tbody>
     </table>
 

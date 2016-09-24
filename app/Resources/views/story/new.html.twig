@@ -1,16 +1,63 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Story creation</h1>
-
-    {{ form_start(form, { 'attr' : {'enctype': 'multipart/form-data' } } ) }}
-        {{ form_widget(form) }}
+    <style>
+    .geoposition
+    {
+        display: inline;
+        width: 125px;
+    }
+    </style>
         
+    <h1>Tell us your story!</h1>
+
+    {{ form_start(form, { 'attr' : {'enctype': 'multipart/form-data', 'class': 'form' } } ) }}
+    <div>
+        {{ form_widget(form.name,  { 'attr' : {'class': 'form-control' } } ) }}
+    </div>
+    <div class="form">
+                    <p class="help-block">Tell us your story. Limited to X,000 characters or less.</p>
+        {{ form_widget(form.description,  { 'attr' : {'class': 'form-control', 'rows': 10 } } ) }}
+                     <p> <button type="reset" class="btn btn-default">Reset</button></p>
+                </div>
+                     
+    <div>
+        {{ form_label(form.latitude) }}
+        {{ form_widget(form.latitude,  { 'attr' : {'class': 'form-control geoposition' } } ) }}
+
+        {{ form_label(form.longitude) }}
+        {{ form_widget(form.longitude,  { 'attr' : {'class': 'form-control geoposition',  } } ) }}
+        
+        <input type="button" value="Detect Location" class="btn btn-default" onclick="DetectLocation();"/>
+    </div>
+        {{ form_widget(form,  { 'attr' : {'class': 'form' } } ) }}
+        <div class="form-group">
+                <label for="InputFile">Upload Your Media</label>
+                <p class="help-block">Limited to 2 images. Files must be less than X mb.</p>
         {{ form_widget(media_form) }}
-        <input type="submit" value="Create" />
+       </div>
+        
+    
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox">I agree to terms???
+                </label>
+              </div>
+        <input type="submit" value="Create" class="btn btn-default"/>
     {{ form_end(form) }}
     
- 
+    <script>
+function DetectLocation() 
+{
+  var startPos;
+  var geoSuccess = function(position) {
+      console.log(position);
+    document.getElementById('{{ form.latitude.vars.id }}').value = (position.coords.latitude);
+    document.getElementById('{{ form.longitude.vars.id }}').value = (position.coords.longitude);
+  };
+  navigator.geolocation.getCurrentPosition(geoSuccess);
+};
+    </script>
 
     <ul>
         <li>

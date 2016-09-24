@@ -15,7 +15,7 @@ class MediaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
+            //->add('name')
             //->add('created', 'datetime')
             //->add('updated', 'datetime')
             //->add('product')
@@ -23,6 +23,7 @@ class MediaType extends AbstractType
                 'required'      => false,
                 'allow_delete'  => true, // not mandatory, default is true
                 'download_link' => true, // not mandatory, default is true
+                'label'         => false,
             ));
         ;
     }
