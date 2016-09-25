@@ -19,7 +19,21 @@
                 
                         <p>Media</p>
                     {% for media in story.media %}
+                        {% set ext = media.name|slice(-4) %}
                         <p><a href="{{ path('story_media_download', { 'id': media.id } ) }}">Download {{ media.name }}</a></p>
+                        {% if ext | length %}
+                            {% if ext == ".jpg" or ext == "jpeg" or ext == ".png" %}
+                            <p><img width="480px" src="{{ vich_uploader_asset(media, 'mediaFile') }}" alt="{{ media.name }}" /></p>
+                            {% endif %}
+                            {% if ext == ".mp4" %}
+                            <p><video width="480px" src="{{ vich_uploader_asset(media, 'mediaFile') }}" alt="{{ media.name }}" controls>
+                                
+                                    <source src="{{ vich_uploader_asset(media, 'mediaFile') }}" type="video/mp4">
+                                </video>
+                            </p>
+                            {% endif %}                        
+                        {% endif %}
+
                     {% endfor %}
                     
                 {% endif %}

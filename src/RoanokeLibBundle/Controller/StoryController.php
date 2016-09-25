@@ -233,6 +233,25 @@ class StoryController extends Controller
     }
     
     /**
+     * 
+     * @Route("/stop/{id}", name="story_api_opentok_stop")
+     * @Method({"GET","POST"})
+     */
+    public function apiOpenTokStopAction(Request $request, $id)
+    {
+        
+        $opentokapi    = $this->getParameter("opentok.api_key");
+        $opentoksecret = $this->getParameter("opentok.secret");
+        
+        $opentok = new \OpenTok\OpenTok($opentokapi, $opentoksecret);
+        
+        
+        $archive = $opentok->stopArchive($id);
+    
+        return new \Symfony\Component\HttpFoundation\Response('');
+    }
+    
+    /**
      * Finds and displays a Story entity.
      *
      * @Route("/{id}", name="story_show")

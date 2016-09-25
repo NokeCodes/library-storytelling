@@ -8,7 +8,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-    story_path: %kernel.root_dir%/data/story
+    story_path: %kernel.root_dir%/../web/uploads
 
 framework:
     #esi:             ~
@@ -91,7 +91,7 @@ vich_uploader:
 
     mappings:
         story_media:
-            #uri_prefix:         /images/products
+            uri_prefix:         /library-storytelling/web/uploads
             upload_destination: story_media_fs
             namer:              vich_uploader.namer_origname
 
