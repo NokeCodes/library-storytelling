@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    
+<script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
+
+    <script>
+        var sessionId = "{{ sessionId }}";
+        var apiKey = "{{ apiKey }}";
+        var token = "{{ token }}";
+    </script>
+<script>
+    
+var publisher;
+
+function start()
+{
+    var session = OT.initSession(sessionId);
+    publisher = OT.initPublisher('publisher', { insertMode: "append", width: "100%", height: "100%" } );
+    archiveID = null;
+
+    session.connect(apiKey, token, function(error) {
+      if(error) {
+        console.error(error.message);
+        return;
+      }
+      session.publish(publisher);
+    });
+
+    session.on('streamCreated', function(event) {
+      //session.subscribe(event.stream, 'subscribers', { insertMode: 'append' });
+    });
+
+    session.on('archiveStarted', function(event) {
+      archiveID = event.id;
+      console.log('ARCHIVE STARTED');
+      $('.start').hide();
+      $('.stop').show();
+      disableForm();
+    });
+
+    session.on('archiveStopped', function(event) {
+      archiveID = null;
+      console.log('ARCHIVE STOPPED');
+      $('.start').show();
+      $('.stop').hide();
+      enableForm();
+    });
+
+    $(document).ready(function() {
+        
+      $('.start').show();
+      $('.stop').hide();
+      
+      $('.start').click(function (event) {
+        var options = $('.archive-options').serialize();
+        disableForm();
+        $.post('/start', options).fail(enableForm);
+      }).show();
+      $('.stop').click(function(event){
+        $.get('stop/' + archiveID);
+      }).hide();
+    });
+
+
+    function disableForm() {
+      $('.archive-options-fields').attr('disabled', 'disabled');
+    }
+
+    function enableForm() {
+      $('.archive-options-fields').removeAttr('disabled');
+    }
+}
+
+
+    $(document).ready(function() {
+        DetectLocation();
+      $('.start').show();
+      $('.stop').hide();
+      
+      $('.start').click(function (event) {
+          start();
+        //var options = $('.archive-options').serialize();
+        //disableForm();
+        //$.post('/start', options).fail(enableForm);
+      }).show();
+      $('.stop').click(function(event){
+          publisher.destroy();
+          window.location.href = "{{ path('thankyou') }}";
+        //$.get('stop/' + archiveID);
+      }).hide();
+    });
+
+
+</script>
+    <style>
+    .geoposition
+    {
+        display: inline;
+        width: 125px;
+    }
+    .start
+    {
+        
+    }
+    .stop
+    {
+        
+    }
+    #publisher
+    {
+        width: 640px;
+        
+        height: 480px;
+    }
+    </style>
+        
+    <h1>Tell us your story! <a class="btn btn-success start">Start Recording</a><a class="btn btn-danger stop">Stop Recording</a></h1>
+
+    <div>
+        <label for="story_latitude">Latitude</label>
+        <input type="text" id="story_latitude" name="story[latitude]" class="form-control geoposition">
+
+        <label for="story_longitude">Longitude</label>
+        <input type="text" id="story_longitude" name="story[longitude]" class="form-control geoposition">
+        
+        <input type="button" value="Detect Location" class="btn btn-default" onclick="DetectLocation();">
+    </div>
+            <div class="video-body">
+                <div id="publisher"></div>
+            </div>
+    <script>
+function DetectLocation() 
+{
+  var startPos;
+  var geoSuccess = function(position) {
+      console.log(position);
+    document.getElementById('story_latitude').value = (position.coords.latitude);
+    document.getElementById('story_longitude').value = (position.coords.longitude);
+  };
+  navigator.geolocation.getCurrentPosition(geoSuccess);
+};
+    </script>
+
+    <ul>
+        <li>
+            <a href="{{ path('story_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

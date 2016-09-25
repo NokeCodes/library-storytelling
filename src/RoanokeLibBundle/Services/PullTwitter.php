@@ -22,7 +22,7 @@ class PullTwitter {
     }
     
         
-    public function pullTwitterStories($hashtag = "RoanokeStory")
+    public function pullTwitterStories($hashtag = "#Roanoke")
     {
         
         $em = $this->container->get("doctrine")->getManager();

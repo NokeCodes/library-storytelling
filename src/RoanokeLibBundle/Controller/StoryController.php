@@ -76,6 +76,40 @@ class StoryController extends Controller
             'media_form' => $media_form->createView(),
         ));
     }
+    
+    /**
+     * Creates a new Story entity.
+     *
+     * @Route("/newrec", name="story_new_rec")
+     * @Method({"GET", "POST"})
+     */
+    public function newRecAction(Request $request)
+    {
+
+        $opentokapi    = $this->getParameter("opentok.api_key");
+        $opentoksecret = $this->getParameter("opentok.secret");
+        
+        $opentok = new \OpenTok\OpenTok($opentokapi, $opentoksecret);
+        
+        $sessionOptions = array(
+            'archiveMode' => \OpenTok\ArchiveMode::ALWAYS,
+            'mediaMode' => \OpenTok\MediaMode::ROUTED
+        );
+        
+        $query = $request->query->all();
+
+        $sessionId = $opentok->createSession($sessionOptions)->getSessionId();
+
+        $token = $opentok->generateToken($sessionId, array(
+            'role' => \OpenTok\Role::MODERATOR
+        ));
+
+        return $this->render('story/newrec.html.twig', array(
+            'apiKey' => $opentokapi,
+            'sessionId' => $sessionId,
+            'token' => $token
+        ));
+    }
 
     /**
      * Creates a new Story entity.
@@ -137,6 +171,65 @@ class StoryController extends Controller
         $pullTwitter = $this->container->get("roanokelib.pull_twitter");
         return $pullTwitter->pullTwitterStories();
          
+    }
+    
+    /**
+     * 
+     * @Route("/api/openTok", name="story_api_opentok")
+     * @Method({"POST"})
+     */
+    public function apiOpenTokPostAction(Request $request)
+    {
+        
+        $input = @file_get_contents("php://input");
+        $event_json = json_decode($input);
+       
+        if($event_json->status == "available")
+        {
+            $file_source = $event_json->url;
+            $file_target = $this->container->getParameter("story_path") . '/' . $event_json->id . ".mp4"; 
+            
+            $rh = fopen($file_source, 'rb');
+            $wh = fopen($file_target, 'w+b');
+            if (!$rh || !$wh) {
+                return new \Symfony\Component\HttpFoundation\Response('error');
+            }
+
+            while (!feof($rh)) {
+                if (fwrite($wh, fread($rh, 4096)) === FALSE) {
+                    return new \Symfony\Component\HttpFoundation\Response('error streaming');
+                }
+                echo ' ';
+                flush();
+            }
+
+            fclose($rh);
+            fclose($wh);
+            
+            $em = $this->getDoctrine()->getManager();
+            
+            $story = new Story();
+            $story->setName("video");
+            $story->setTitle("Video Submission");
+            $story->setDescription("");
+
+
+            $filename = basename($file_target);
+            
+            $media = new Media();
+            $media->setName($filename);
+            $media->setMediaName($filename);
+            $media->setStory($story);
+            $story->addMedia($media);
+
+            $em->persist($media);
+            $em->persist($story);
+            
+            $em->flush();
+        }
+        
+        
+        return new \Symfony\Component\HttpFoundation\Response('error streaming');
     }
     
     /**
