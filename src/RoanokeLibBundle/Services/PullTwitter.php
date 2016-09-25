@@ -22,7 +22,7 @@ class PullTwitter {
     }
     
         
-    public function pullTwitterStories($hashtag = "LSUvsAUB")
+    public function pullTwitterStories($hashtag = "RoanokeStory")
     {
         
         $em = $this->container->get("doctrine")->getManager();
@@ -67,8 +67,8 @@ class PullTwitter {
                     //\Symfony\Component\VarDumper\VarDumper::dump($status);
                     
                     $story = new Story();
-                    $story->setName($status->user->name . " - @" . $status->user->screen_name);
-                    $story->setTitle("Twitter, ".$status->created_at.", ".$status->id);
+                    $story->setName(utf8_encode($status->user->name . " - @" . $status->user->screen_name));
+                    $story->setTitle(utf8_encode("Twitter, ".$status->created_at.", ".$status->id));
                     $story->setDescription($status->text);
                     if($status->geo && $status->geo->type == "Point")
                     {

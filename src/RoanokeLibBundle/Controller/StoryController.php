@@ -29,7 +29,7 @@ class StoryController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $stories = $em->getRepository('RoanokeLibBundle:Story')->findAll();
+        $stories = $em->getRepository('RoanokeLibBundle:Story')->findBy(array(), array('created' => 'desc'));
 
         return $this->render('story/index.html.twig', array(
             'stories' => $stories,

@@ -26,7 +26,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Project name</a>
+        <a class="navbar-brand" href="{{ path('story') }}">Project name</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <form class="navbar-form navbar-right">
@@ -61,11 +61,13 @@
         <div class="col-md-8">
                 {% block body %}{% endblock %}
       </div>
+      {#
       <div class="col-md-4">
          <h2>Heading</h2>
          <p>Basic intro blurb and bare bone instructions.</p>
          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
       </div>
+      #}
   </div>
 </div>
 
