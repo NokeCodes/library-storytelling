@@ -41,7 +41,8 @@ class StoryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'RoanokeLibBundle\Entity\Story'
+            'data_class' => 'RoanokeLibBundle\Entity\Story',
+            'csrf_protection' => false,
         ));
     }
 }

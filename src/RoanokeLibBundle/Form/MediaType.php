@@ -34,7 +34,8 @@ class MediaType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'RoanokeLibBundle\Entity\Media'
+            'data_class' => 'RoanokeLibBundle\Entity\Media',
+            'csrf_protection' => false,
         ));
     }
 }

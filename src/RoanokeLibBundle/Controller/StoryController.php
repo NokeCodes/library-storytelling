@@ -78,6 +78,101 @@ class StoryController extends Controller
     }
 
     /**
+     * Creates a new Story entity.
+     *
+     * story[name]
+     * story[title]
+     * story[description]
+     * story[latitude]
+     * story[longitude]
+     * media[mediaFile][file]
+     * 
+     * @Route("/api/new", name="story_api_new")
+     * @Method({"POST"})
+     */
+    public function apiNewAction(Request $request)
+    {
+        $story = new Story();
+        $form = $this->createForm('RoanokeLibBundle\Form\StoryType', $story);
+        $form->handleRequest($request);
+        
+        $media = new Media();
+        $media_form = $this->createForm('RoanokeLibBundle\Form\MediaType', $media);
+        $media_form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid() && $media_form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            if($media->getMediaFile())
+            {
+                $story->addMedia($media);
+                $media->setStory($story);
+                $media->setName($media->getMediaFile()->getFilename());
+                
+                $em->persist($media);
+            }
+            $em->persist($story);
+            $em->flush();
+
+            return $this->redirectToRoute('thankyou');
+        }
+
+        return $this->render('story/new.html.twig', array(
+            'story' => $story,
+            
+
+            'form' => $form->createView(),
+            'media_form' => $media_form->createView(),
+        ));
+    }
+    
+    
+
+    /**
+     * 
+     * @Route("/pull/twitter", name="story_pull_twitter")
+     * @Method({"GET"})
+     */
+    public function pullTwitterAction(Request $request)
+    {
+        
+        
+        /*
+        $story = new Story();
+        $form = $this->createForm('RoanokeLibBundle\Form\StoryType', $story);
+        $form->handleRequest($request);
+        
+        $media = new Media();
+        $media_form = $this->createForm('RoanokeLibBundle\Form\MediaType', $media);
+        $media_form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid() && $media_form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            if($media->getMediaFile())
+            {
+                $story->addMedia($media);
+                $media->setStory($story);
+                $media->setName($media->getMediaFile()->getFilename());
+                
+                $em->persist($media);
+            }
+            $em->persist($story);
+            $em->flush();
+
+            return $this->redirectToRoute('thankyou');
+        }
+
+        return $this->render('story/new.html.twig', array(
+            'story' => $story,
+            
+
+            'form' => $form->createView(),
+            'media_form' => $media_form->createView(),
+        ));
+         */
+         */
+    }
+    
+    /**
      * Finds and displays a Story entity.
      *
      * @Route("/{id}", name="story_show")
