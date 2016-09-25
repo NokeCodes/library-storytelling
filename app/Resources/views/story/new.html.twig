@@ -13,7 +13,14 @@
 
     {{ form_start(form, { 'attr' : {'enctype': 'multipart/form-data', 'class': 'form' } } ) }}
     <div>
+        <p>
         {{ form_widget(form.name,  { 'attr' : {'class': 'form-control' } } ) }}
+        </p>
+    </div>
+    <div>
+        <p>
+        {{ form_widget(form.title,  { 'attr' : {'class': 'form-control' } } ) }}
+        </p>
     </div>
     <div class="form">
                     <p class="help-block">Tell us your story. Limited to X,000 characters or less.</p>

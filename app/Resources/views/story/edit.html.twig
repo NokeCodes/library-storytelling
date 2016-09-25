@@ -1,21 +1,92 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Story edit</h1>
+    <style>
+    .geoposition
+    {
+        display: inline;
+        width: 125px;
+    }
+    </style>
+        
+    <h1>Edit story</h1>
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
+    {{ form_start(form, { 'attr' : {'enctype': 'multipart/form-data', 'class': 'form' } } ) }}
+    <div>
+        <p>
+        {{ form_widget(form.name,  { 'attr' : {'class': 'form-control' } } ) }}
+        </p>
+    </div>
+    <div>
+        <p>
+        {{ form_widget(form.title,  { 'attr' : {'class': 'form-control' } } ) }}
+        </p>
+    </div>
+    <div class="form">
+                    <p class="help-block">Tell us your story. Limited to X,000 characters or less.</p>
+        {{ form_widget(form.description,  { 'attr' : {'class': 'form-control', 'rows': 10 } } ) }}
+                     <p> <button type="reset" class="btn btn-default">Reset</button></p>
+                </div>
+                     
+    <div>
+        {{ form_label(form.latitude) }}
+        {{ form_widget(form.latitude,  { 'attr' : {'class': 'form-control geoposition' } } ) }}
 
+        {{ form_label(form.longitude) }}
+        {{ form_widget(form.longitude,  { 'attr' : {'class': 'form-control geoposition',  } } ) }}
+        
+        <input type="button" value="Detect Location" class="btn btn-default" onclick="DetectLocation();"/>
+    </div>
+        
+        
+        {{ form_widget(form,  { 'attr' : {'class': 'form' } } ) }}
+        
+        
+                {% if story.media | length %}
+                
+                        <p>Media</p>
+                    {% for media in story.media %}
+                        <p><a href="{{ path('story_media_download', { 'id': media.id } ) }}">Download {{ media.name }}</a></p>
+                    {% endfor %}
+                    
+                {% endif %}
+                
+        
+        <div class="form-group">
+                <label for="InputFile">Upload Your Media</label>
+                <p class="help-block">Limited to 2 images. Files must be less than X mb.</p>
+        {{ form_widget(media_form) }}
+       </div>
+        
+    
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox">I agree to terms???
+                </label>
+              </div>
+        <input type="submit" value="Edit" class="btn btn-default"/>
+        
+    {{ form_end(form) }}
+    <br/>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete" class="btn btn-default">
+            {{ form_end(delete_form) }}
+    
+    <script>
+function DetectLocation() 
+{
+  var startPos;
+  var geoSuccess = function(position) {
+      console.log(position);
+    document.getElementById('{{ form.latitude.vars.id }}').value = (position.coords.latitude);
+    document.getElementById('{{ form.longitude.vars.id }}').value = (position.coords.longitude);
+  };
+  navigator.geolocation.getCurrentPosition(geoSuccess);
+};
+    </script>
     <ul>
         <li>
             <a href="{{ path('story_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
         </li>
     </ul>
 {% endblock %}

@@ -61,7 +61,7 @@ class Story
     /**
      * @var Media
      * 
-     * @ORM\OneToMany(targetEntity="Media", mappedBy="story")
+     * @ORM\OneToMany(targetEntity="Media", mappedBy="story", cascade={"remove"})
      * 
      */
     private $media;

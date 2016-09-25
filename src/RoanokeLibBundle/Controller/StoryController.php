@@ -54,19 +54,18 @@ class StoryController extends Controller
 
         if ($form->isSubmitted() && $form->isValid() && $media_form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            if($media->getMediaName())
+            if($media->getMediaFile())
             {
-                
                 $story->addMedia($media);
                 $media->setStory($story);
-                $media->setName($media->getMediaName());
+                $media->setName($media->getMediaFile()->getFilename());
                 
                 $em->persist($media);
             }
             $em->persist($story);
             $em->flush();
 
-            return $this->redirectToRoute('story_show', array('id' => $story->getId()));
+            return $this->redirectToRoute('thankyou');
         }
 
         return $this->render('story/new.html.twig', array(
@@ -117,10 +116,24 @@ class StoryController extends Controller
         $deleteForm = $this->createDeleteForm($story);
         $editForm = $this->createForm('RoanokeLibBundle\Form\StoryType', $story);
         $editForm->handleRequest($request);
+        
+
+        $media = new Media();
+        $media_form = $this->createForm('RoanokeLibBundle\Form\MediaType', $media);
+        $media_form->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($story);
+            
+            if($media->getMediaFile())
+            {
+                $story->addMedia($media);
+                $media->setStory($story);
+                $media->setName($media->getMediaFile()->getFilename());
+                
+                $em->persist($media);
+            }
             $em->flush();
 
             return $this->redirectToRoute('story_edit', array('id' => $story->getId()));
@@ -128,7 +141,8 @@ class StoryController extends Controller
 
         return $this->render('story/edit.html.twig', array(
             'story' => $story,
-            'edit_form' => $editForm->createView(),
+            'form' => $editForm->createView(),
+            'media_form' => $media_form->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }

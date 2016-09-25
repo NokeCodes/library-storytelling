@@ -3,6 +3,11 @@ roanoke_lib:
     type:     annotation
     prefix:   /
 
+story:
+    path:      /
+    defaults:  { _controller: RoanokeLibBundle:Story:new }
+
+        
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation

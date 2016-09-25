@@ -20,6 +20,9 @@ class StoryType extends AbstractType
             ->add('name', TextType::class, array(
                 'attr' => array('placeholder' => 'Your Full Name'),
             ))
+            ->add('title', TextType::class, array(
+                'attr' => array('placeholder' => 'Story Title'),
+            ))
             ->add('description')
             ->add('latitude', TextType::class, array(
                 'required' => false

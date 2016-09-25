@@ -3,40 +3,34 @@
 {% block body %}
     <h1>Story list</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Created</th>
-                <th>Updated</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for story in stories %}
-            <tr>
-                <td><a href="{{ path('story_show', { 'id': story.id }) }}">{{ story.id }}</a></td>
-                <td>{{ story.name }}</td>
-                <td>{{ story.description }}</td>
-                <td>{% if story.created %}{{ story.created|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{% if story.updated %}{{ story.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('story_show', { 'id': story.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('story_edit', { 'id': story.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
+        {% for story in stories %}
+            
+            <div class="row">
+                {#
+                <img src="..." alt="..." class="img-rounded">
+                #}
+                <h4>{{ story.title }}</h4>
+                <p style="color: grey; font-size: small;"><em>by:</em> {{ story.name }} on {{ story.created|date('Y-m-d H:i:s') }}</p>
+                <p>{{ story.description }}</p>
+                <p><b>Latitude:</b> {% if story.latitude %}{{ story.latitude }}{% endif %} <b>Longtitude:</b> {% if story.longitude %}{{ story.longitude }}{% endif %}</p>
+                
+                {% if story.media | length %}
+                
+                        <p>Media</p>
+                    {% for media in story.media %}
+                        <p><a href="{{ path('story_media_download', { 'id': media.id } ) }}">Download {{ media.name }}</a></p>
+                    {% endfor %}
+                    
+                {% endif %}
+                <p>
+                    <a class="btn btn-default" href="{{ path('story_edit', { 'id': story.id }) }}">Edit</a>
+                    <a class="btn btn-warning" href="{{ path('story_delete', { 'id': story.id }) }}">Delete</a>
+                </p>
+                
+            </div>
+
+        {% endfor %}
     <ul>
         <li>
             <a href="{{ path('story_new') }}">Create a new entry</a>
