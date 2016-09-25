@@ -20,6 +20,8 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
             new Vich\UploaderBundle\VichUploaderBundle(),
+            new Endroid\Bundle\TwitterBundle\EndroidTwitterBundle(),
+            new Craue\ConfigBundle\CraueConfigBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

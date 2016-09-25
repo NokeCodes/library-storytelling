@@ -2,3 +2,6 @@ services:
 #    roanoke_lib.example:
 #        class: RoanokeLibBundle\Example
 #        arguments: ["@service_id", "plain_value", %parameter%]
+    roanokelib.pull_twitter:
+          class: RoanokeLibBundle\Services\PullTwitter
+          arguments: ["@service_container"]

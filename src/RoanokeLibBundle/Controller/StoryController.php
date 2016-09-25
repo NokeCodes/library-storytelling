@@ -134,42 +134,9 @@ class StoryController extends Controller
      */
     public function pullTwitterAction(Request $request)
     {
-        
-        
-        /*
-        $story = new Story();
-        $form = $this->createForm('RoanokeLibBundle\Form\StoryType', $story);
-        $form->handleRequest($request);
-        
-        $media = new Media();
-        $media_form = $this->createForm('RoanokeLibBundle\Form\MediaType', $media);
-        $media_form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid() && $media_form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            if($media->getMediaFile())
-            {
-                $story->addMedia($media);
-                $media->setStory($story);
-                $media->setName($media->getMediaFile()->getFilename());
-                
-                $em->persist($media);
-            }
-            $em->persist($story);
-            $em->flush();
-
-            return $this->redirectToRoute('thankyou');
-        }
-
-        return $this->render('story/new.html.twig', array(
-            'story' => $story,
-            
-
-            'form' => $form->createView(),
-            'media_form' => $media_form->createView(),
-        ));
-         */
-         */
+        $pullTwitter = $this->container->get("roanokelib.pull_twitter");
+        return $pullTwitter->pullTwitterStories();
+         
     }
     
     /**

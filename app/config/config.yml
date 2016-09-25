@@ -8,6 +8,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    story_path: %kernel.root_dir%/data/story
 
 framework:
     #esi:             ~
@@ -78,7 +79,7 @@ knp_gaufrette:
     adapters:
         story_adapter:
             local:
-                directory: %kernel.root_dir%/data/story
+                directory: %story_path%
 
     filesystems:
         story_media_fs:
@@ -93,3 +94,9 @@ vich_uploader:
             #uri_prefix:         /images/products
             upload_destination: story_media_fs
             namer:              vich_uploader.namer_origname
+
+endroid_twitter:
+    consumer_key: "RmuKXO86w92VxFc1d4IKrphim"
+    consumer_secret: "8C7YjCBawPHTG8c6NrQLZV3MRaVu5Jc1zVpfydV2KFuFw30vvd"
+    access_token: "2461138105-I6LcpYoTjfdwqWewfbWK8tCsUg2pmU1XRDY7OdE"
+    access_token_secret: "swKpH9daFwlg98KOfnIX1EElPlUHEgFoQAYWq1h3nYKzE"
